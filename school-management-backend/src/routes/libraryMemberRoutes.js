@@ -1,0 +1,14 @@
+const express = require('express');
+const router = express.Router();
+const createCrudController = require('../controllers/crudController');
+const createCrudService = require('../services/crudService');
+const { LibraryMember } = require('../models/Content');
+const { authenticate, permissionGuard } = require('../middlewares/authMiddleware');
+const ctrl = createCrudController(createCrudService(LibraryMember, [{ path: 'user_id', select: 'name email' }]), 'LibraryMember');
+router.use(authenticate);
+router.get('/',    permissionGuard('library.view'),   ctrl.getAll);
+router.get('/:id', permissionGuard('library.view'),   ctrl.getById);
+router.post('/',   permissionGuard('library.issue'),  ctrl.create);
+router.put('/:id', permissionGuard('library.issue'),  ctrl.update);
+router.delete('/:id', permissionGuard('library.issue'), ctrl.delete);
+module.exports = router;

@@ -1,0 +1,14 @@
+const express = require('express');
+const router = express.Router();
+const createCrudController = require('../controllers/crudController');
+const createCrudService = require('../services/crudService');
+const { Staff } = require('../models/Teacher');
+const { authenticate, permissionGuard } = require('../middlewares/authMiddleware');
+const ctrl = createCrudController(createCrudService(Staff, [{ path: 'user_id', select: 'name email phone' }]), 'Staff');
+router.use(authenticate);
+router.get('/',    permissionGuard('staff.view'),   ctrl.getAll);
+router.get('/:id', permissionGuard('staff.view'),   ctrl.getById);
+router.post('/',   permissionGuard('staff.create'), ctrl.create);
+router.put('/:id', permissionGuard('staff.edit'),   ctrl.update);
+router.delete('/:id', permissionGuard('staff.delete'), ctrl.delete);
+module.exports = router;

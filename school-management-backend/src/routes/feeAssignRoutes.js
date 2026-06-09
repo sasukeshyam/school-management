@@ -1,0 +1,14 @@
+const express = require('express');
+const router = express.Router();
+const createCrudController = require('../controllers/crudController');
+const createCrudService = require('../services/crudService');
+const { FeeAssign } = require('../models/Fee');
+const { authenticate, permissionGuard } = require('../middlewares/authMiddleware');
+const ctrl = createCrudController(createCrudService(FeeAssign, ['fee_master_id','student_id']), 'FeeAssign');
+router.use(authenticate);
+router.get('/',    permissionGuard('fees.view'),   ctrl.getAll);
+router.get('/:id', permissionGuard('fees.view'),   ctrl.getById);
+router.post('/',   permissionGuard('fees.collect'),ctrl.create);
+router.put('/:id', permissionGuard('fees.collect'),ctrl.update);
+router.delete('/:id', permissionGuard('fees.delete'), ctrl.delete);
+module.exports = router;

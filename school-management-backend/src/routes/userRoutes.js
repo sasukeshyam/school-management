@@ -1,0 +1,14 @@
+const express = require('express');
+const router = express.Router();
+const createCrudController = require('../controllers/crudController');
+const createCrudService = require('../services/crudService');
+const User = require('../models/User');
+const { authenticate, permissionGuard } = require('../middlewares/authMiddleware');
+const ctrl = createCrudController(createCrudService(User), 'User');
+router.use(authenticate);
+router.get('/',    permissionGuard('users.view'),   ctrl.getAll);
+router.get('/:id', permissionGuard('users.view'),   ctrl.getById);
+router.post('/',   permissionGuard('users.create'), ctrl.create);
+router.put('/:id', permissionGuard('users.edit'),   ctrl.update);
+router.delete('/:id', permissionGuard('users.delete'), ctrl.delete);
+module.exports = router;
