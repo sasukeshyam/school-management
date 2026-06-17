@@ -10,14 +10,23 @@ import { useAuthStore } from '@/store/authStore'
 //   withCredentials: true,
 //   headers:        { 'Content-Type': 'application/json' },
 // })
-console.log('VITE_API_URL =>', import.meta.env.VITE_API_URL)
+// console.log('VITE_API_URL =>', import.meta.env.VITE_API_URL)
+// const api = axios.create({
+//   baseURL: import.meta.env.VITE_API_URL,
+//   withCredentials: true,
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+// })
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: 'https://school-management-system-backend-25a6.onrender.com/api/v1',
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
 })
+
+console.log('BASE URL =>', api.defaults.baseURL)
 
 // Attach access token
 api.interceptors.request.use((config) => {
